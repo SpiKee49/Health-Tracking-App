@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .nav-item{
+        @apply bg-secondary h-full aspect-square mx-5 text-primary flex justify-center items-center rounded-[50px] text-xl uppercase font-bold hover:bg-hover hover:rounded-2xl transition-all duration-300 ease-linear
+    }
+    .nav-item-description{
+        @apply text-sm text-center opacity-0 transition-all duration-300 ease-linear text-secondary absolute top-[50px] p-2 
+    }
+    .page-wrapper{
+        @apply w-[70%] mx-auto bg-primary shadow-2xl shadow-secondary p-20 rounded-3xl my-5
+    }
+}
