@@ -5,6 +5,7 @@ import {
     UserPlusIcon,
 } from '@heroicons/react/20/solid'
 
+import AddUserForm from './AddUserForm'
 import { User } from '../../../types'
 import { UserContext } from '../../App'
 
@@ -16,6 +17,7 @@ function Account() {
     const [errorMsg, setErrorMsg] = useState('')
     const [successMsg, setSuccessMsg] = useState('')
     const [showAddUser, setShowAddUser] = useState(false)
+    const [needForFetch, setNeedForFetch] = useState(false)
 
     function GetUsers() {
         fetch('http://localhost:8080/')
@@ -26,6 +28,10 @@ function Account() {
     useEffect(() => {
         GetUsers()
     }, [])
+
+    if (needForFetch) {
+        GetUsers()
+    }
 
     return (
         <div className="w-full h-full">
@@ -113,46 +119,59 @@ function Account() {
                                     <td>{user.email}</td>
                                     <td>{user.height}</td>
                                     <td>{user.age}</td>
-                                    <td>
-                                        <button
-                                            onClick={async () => {
-                                                const response = await fetch(
-                                                    'http://localhost:8080/remove-user',
-                                                    {
-                                                        method: 'POST',
-                                                        headers: {
-                                                            'Content-Type':
-                                                                'application/json',
-                                                        },
-                                                        body: JSON.stringify({
-                                                            userID: user.userID,
-                                                        }),
+                                    {!(user.email == 'admin@admin.sk') && (
+                                        <td>
+                                            <button
+                                                onClick={async () => {
+                                                    const response =
+                                                        await fetch(
+                                                            'http://localhost:8080/remove-user',
+                                                            {
+                                                                method: 'POST',
+                                                                headers: {
+                                                                    'Content-Type':
+                                                                        'application/json',
+                                                                },
+                                                                body: JSON.stringify(
+                                                                    {
+                                                                        userID: user.userID,
+                                                                    }
+                                                                ),
+                                                            }
+                                                        )
+                                                    const data =
+                                                        await response.json()
+                                                    if (
+                                                        response.status === 200
+                                                    ) {
+                                                        setSuccessMsg(data.msg)
+                                                        setTimeout(() => {
+                                                            setSuccessMsg('')
+                                                            GetUsers()
+                                                        }, 3000)
+                                                    } else {
+                                                        setErrorMsg(data.msg)
+                                                        setTimeout(() => {
+                                                            setErrorMsg('')
+                                                        }, 3000)
                                                     }
-                                                )
-                                                const data =
-                                                    await response.json()
-                                                if (response.status === 200) {
-                                                    setSuccessMsg(data.msg)
-                                                    setTimeout(() => {
-                                                        setSuccessMsg('')
-                                                        GetUsers()
-                                                    }, 3000)
-                                                } else {
-                                                    setErrorMsg(data.msg)
-                                                    setTimeout(() => {
-                                                        setErrorMsg('')
-                                                    }, 3000)
-                                                }
-                                            }}
-                                            className="w-10 h-10 bg-primary text-primary uppercase "
-                                        >
-                                            <TrashIcon className="w-6 h-6 mx-auto fill-secondary hover:fill-hover transition-all duration-300 ease-linear" />
-                                        </button>
-                                    </td>
+                                                }}
+                                                className="w-10 h-10 bg-primary text-primary uppercase "
+                                            >
+                                                <TrashIcon className="w-6 h-6 mx-auto fill-secondary hover:fill-hover transition-all duration-300 ease-linear" />
+                                            </button>
+                                        </td>
+                                    )}
                                 </tr>
                             ))}
                         </tbody>
                     </table>
+                    {showAddUser && (
+                        <AddUserForm
+                            nff={setNeedForFetch}
+                            closeModal={setShowAddUser}
+                        />
+                    )}
                 </>
             )}
         </div>
