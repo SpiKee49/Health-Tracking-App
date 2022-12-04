@@ -3,7 +3,7 @@ export type User = {
     username: string
     userpassword: string
     email: string
-    weight: number
+    age: number
     height: number
 }
 
@@ -16,4 +16,14 @@ export type Activity = {
 export type UserContextType = {
     user?: User | null
     setUser: (value: User | null) => void
+}
+
+export type LogType = {
+    id: number
+    added_date: string
+    steps: number
+    weight: number
+    heartBeat: number
+    userID: number
+    methodID: number
 }

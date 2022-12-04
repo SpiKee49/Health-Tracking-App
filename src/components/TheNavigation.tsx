@@ -1,7 +1,7 @@
-import { HomeIcon, ListBulletIcon, UserIcon } from '@heroicons/react/24/solid';
+import { HomeIcon, ListBulletIcon, UserIcon } from '@heroicons/react/24/solid'
 
-import { Link } from 'react-router-dom';
-import React from 'react';
+import { Link } from 'react-router-dom'
+import React from 'react'
 
 function TheNavigation() {
     return (
@@ -23,11 +23,11 @@ function TheNavigation() {
             <Link className="group" to={'login'}>
                 <UserIcon className="w-6 h-6 stroke-white" />
                 <span className="nav-item-description group-hover:opacity-100 group-hover:top-[90px]">
-                    Login
+                    Account
                 </span>
             </Link>
         </nav>
-    );
+    )
 }
 
-export default TheNavigation;
+export default TheNavigation

@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS Users (
     username VARCHAR(20) NOT NULL,
     userpassword VARCHAR(20) NOT NULL,
     email VARCHAR(20) NOT NULL UNIQUE,
-    weight FLOAT NOT NULL,
+    age INT NOT NULL,
     height INT NOT NULL
 );
 CREATE TABLE IF NOT EXISTS Methods (
@@ -40,10 +40,10 @@ CREATE TABLE IF NOT EXISTS Steps (
     FOREIGN KEY (userID) REFERENCES Users(userID),
     FOREIGN KEY (methodID) REFERENCES Methods(methodID)
 );
-INSERT INTO Users (username, userpassword, email, weight, height)
-VALUES ('miro', 'pele', 'miro@pele.sk', '95.3', '183'),
-    ('anton', 'ferko', 'anton@ferko.sk', '75', '201'),
-    ('admin', 'admin', 'admin@admin.sk', '100', '100');
+INSERT INTO Users (username, userpassword, email, age, height)
+VALUES ('miro', 'pele', 'miro@pele.sk', '20', '183'),
+    ('anton', 'ferko', 'anton@ferko.sk', '35', '201'),
+    ('admin', 'admin', 'admin@admin.sk', '60', '100');
 INSERT INTO Methods (methodName, methodDesc)
 VALUES (
         'Running',

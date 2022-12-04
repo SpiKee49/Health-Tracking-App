@@ -13,6 +13,7 @@ const connection = mysql2.createConnection({
     password: 'pele',
     port: '3306',
     database: 'maindb',
+    connectionLimit: 10,
 })
 
 /* API setup */
@@ -25,17 +26,12 @@ app.use(express.json({ extended: false }))
 
 /* Home endpoint */
 app.get('/', async (_, res) => {
-    const data = await new Promise((resolve) => {
-        connection.query(`SELECT * FROM Users`, (err, result) => {
-            if (err || !Array.isArray(result) || result.length === 0) {
-                return resolve(null)
-            }
-
-            resolve(result)
-        })
+    connection.query(`SELECT * FROM Users`, (err, result) => {
+        if ((err, result)) {
+            console.log(err)
+        }
+        res.status(200).json(result).end()
     })
-
-    res.status(200).json(data).end()
 })
 
 /* Get methods endpoint */
@@ -56,7 +52,6 @@ app.get('/methods', async (_, res) => {
 /* Add activity log */
 app.post('/methods', (req, res) => {
     const body = req.body
-    const data = []
     const heartValues = [
         body.currentDate,
         body.hearBeat,
@@ -78,52 +73,75 @@ app.post('/methods', (req, res) => {
     connection.query(
         'INSERT INTO `HeartBeat` (added_date,amount,userID,methodID) VALUES (?);',
         [heartValues],
-        (err, result) => {
+        (err) => {
             if (err) {
                 console.log(err)
+                res.status(400)
+                    .message(
+                        'Hey dude, you messed up, try again... or whatever.js'
+                    )
+                    .end()
             }
-            console.log(result)
-            data.push(result)
         }
     )
     connection.query(
         ' INSERT INTO `Weights` (added_date,amount,userID,methodID) VALUES (?);',
         [weightValues],
-        (err, result) => {
+        (err) => {
             if (err) {
                 console.log(err)
+                res.status(400)
+                    .message(
+                        'Hey dude, you messed up, try again... or whatever.js'
+                    )
+                    .end()
             }
-            console.log(result)
-            data.push(result)
         }
     )
     connection.query(
         ' INSERT INTO `Steps` (added_date,amount,userID,methodID) VALUES (?);',
         [stepsValues],
-        (err, result) => {
+        (err) => {
             if (err) {
+                console.log(err)
+                res.status(400)
+                    .message(
+                        'Hey dude, you messed up, try again... or whatever.js'
+                    )
+                    .end()
+            }
+        }
+    )
+    res.status(200).message('Successfully activity successfully logged').end()
+})
+
+app.get('/getlogs', (req, res) => {
+    const body = req.body
+    connection.query(
+        'insert into `Users` (username, userpassword, email, age, height) values (?)',
+        Object.values(body),
+        (err, result) => {
+            if (err || result.length === 0) {
                 console.log(err)
             }
             console.log(result)
-            data.push(result)
+            res.status(200).json(result).end()
         }
     )
-    res.status(200).json(data).end()
 })
 
 /* Get all Steps endpoint */
-app.get('/steps', async (_, res) => {
-    const data = await new Promise((resolve) => {
-        connection.query(`SELECT * FROM Steps`, (err, result) => {
+app.get('/getlogs', (_, res) => {
+    connection.query(
+        'select S.id,S.added_date,S.amount as steps,W.amount as weight,H.amount as heartBeat,S.userID,S.methodID from `Steps` as `S` inner join `Weights` as `W` on W.id = S.id join `HeartBeat` as `H` on S.id = H.id',
+        (err, result) => {
             if (err || result.length === 0) {
-                return resolve(null)
+                console.log(err)
             }
-
-            resolve(result)
-        })
-    })
-
-    res.status(200).json(data).end()
+            console.log(result)
+            res.status(200).json(result).end()
+        }
+    )
 })
 
 app.post('/login', (req, res) => {

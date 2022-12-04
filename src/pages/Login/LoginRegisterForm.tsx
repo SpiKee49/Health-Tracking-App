@@ -9,7 +9,7 @@ function LoginRegisterForm() {
     const [password, setPass] = useState('')
     const [name, setName] = useState('')
     const [height, setHeight] = useState(0)
-    const [weight, setWeight] = useState(0)
+    const [age, setAge] = useState(0)
 
     async function Login() {
         if (isLogin) {
@@ -26,6 +26,23 @@ function LoginRegisterForm() {
 
             const user = await response.json()
             setUser(user[0])
+        }
+    }
+    async function Register() {
+        if (isLogin) {
+            const response = await fetch('http://localhost:8080/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name,
+                    password,
+                    email,
+                    age,
+                    height,
+                }),
+            })
         }
     }
     return (
@@ -58,17 +75,17 @@ function LoginRegisterForm() {
                             id="height"
                             placeholder="height (in cm)"
                             type="number"
-                            value={height}
+                            value={height === 0 ? '' : height}
                             onChange={(e) => setHeight(+e.target.value)}
                             className="w-full h-16 border-2 px-10 border-secondary outline-none mt-[-0.25rem]"
                             required
                         />
                         <input
-                            id="weight"
-                            placeholder="weight (in kg)"
+                            id="age"
+                            placeholder="age in days"
                             type="number"
-                            value={weight}
-                            onChange={(e) => setWeight(+e.target.value)}
+                            value={age === 0 ? '' : height}
+                            onChange={(e) => setAge(+e.target.value)}
                             className="w-full h-16 border-2 px-10 border-secondary outline-none mt-[-0.25rem]"
                             required
                         />
