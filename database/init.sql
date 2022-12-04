@@ -19,8 +19,9 @@ CREATE TABLE IF NOT EXISTS Weights (
     amount INT NOT NULL,
     userID INT NOT NULL,
     methodID INT DEFAULT NULL,
-    FOREIGN KEY (userID) REFERENCES Users(userID),
-    FOREIGN KEY (methodID) REFERENCES Methods(methodID)
+    FOREIGN KEY (userID) REFERENCES Users(userID) ON DELETE CASCADE,
+    FOREIGN KEY (methodID) REFERENCES Methods(methodID) ON DELETE
+    SET DEFAULT
 );
 CREATE TABLE IF NOT EXISTS HeartBeat (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -28,8 +29,9 @@ CREATE TABLE IF NOT EXISTS HeartBeat (
     amount INT NOT NULL,
     userID INT NOT NULL,
     methodID INT DEFAULT NULL,
-    FOREIGN KEY (userID) REFERENCES Users(userID),
-    FOREIGN KEY (methodID) REFERENCES Methods(methodID)
+    FOREIGN KEY (userID) REFERENCES Users(userID) ON DELETE CASCADE,
+    FOREIGN KEY (methodID) REFERENCES Methods(methodID) ON DELETE
+    SET DEFAULT
 );
 CREATE TABLE IF NOT EXISTS Steps (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -37,8 +39,9 @@ CREATE TABLE IF NOT EXISTS Steps (
     amount INT NOT NULL,
     userID INT NOT NULL,
     methodID INT DEFAULT NULL,
-    FOREIGN KEY (userID) REFERENCES Users(userID),
-    FOREIGN KEY (methodID) REFERENCES Methods(methodID)
+    FOREIGN KEY (userID) REFERENCES Users(userID) ON DELETE CASCADE,
+    FOREIGN KEY (methodID) REFERENCES Methods(methodID) ON DELETE
+    SET DEFAULT
 );
 INSERT INTO Users (username, userpassword, email, age, height)
 VALUES ('miro', 'pele', 'miro@pele.sk', '20', '183'),

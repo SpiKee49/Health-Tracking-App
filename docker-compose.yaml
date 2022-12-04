@@ -3,7 +3,7 @@ version: '3.8' #nemam sajnu, daj dajake cisielko
 services:
     #no a tu teraz uvidime zlate prasiatko
     mariadb:
-        image: mariadb:10.4 #toto ked nevies brasko tak sa nerozpravaj so mnou
+        image: mariadb:10.9 #toto ked nevies brasko tak sa nerozpravaj so mnou
         container_name: mariadb #takto sa vola tvoj kontajneris, resp to kde sa budes prihlasovat do databazy
         restart: unless-stopped #toto mas u pici
         volumes:

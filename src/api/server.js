@@ -34,19 +34,40 @@ app.get('/', async (_, res) => {
     })
 })
 
-/* Get methods endpoint */
-app.get('/methods', async (_, res) => {
-    const data = await new Promise((resolve) => {
-        connection.query(`SELECT * FROM Methods`, (err, result) => {
-            if (err || !Array.isArray(result) || result.length === 0) {
-                return resolve(null)
-            }
-
-            resolve(result)
-        })
+app.get('/users', (_, res) => {
+    connection.query('select * from `Users`', (err, result) => {
+        if (err) {
+            console.log(err)
+            res.status(400).json({ msg: 'Unexpected error' }).end()
+        }
+        res.status(200).json(result).end()
     })
+})
 
-    res.status(200).json(data).end()
+app.post('/remove-user', (req, res) => {
+    const body = req.body
+    connection.query(
+        'delete from `Users` where userID = ?',
+        [body.userID],
+        (err) => {
+            if (err) {
+                console.log(err)
+                res.status(400).json({ msg: 'Unexpected error' }).end()
+            }
+            res.status(200).json({ msg: 'User removed successfully' }).end()
+        }
+    )
+})
+
+/* Get methods endpoint */
+app.get('/methods', (_, res) => {
+    connection.query('select * from `Methods`', (err, result) => {
+        if (err) {
+            res.status(400).json({ msg: 'Unexpected error' }).end()
+        }
+
+        res.status(200).json(result).end()
+    })
 })
 
 /* Add activity log */
@@ -71,61 +92,64 @@ app.post('/methods', (req, res) => {
         body.activity,
     ]
     connection.query(
-        'INSERT INTO `HeartBeat` (added_date,amount,userID,methodID) VALUES (?);',
+        'insert into `HeartBeat` (added_date,amount,userID,methodID) VALUES (?);',
         [heartValues],
         (err) => {
             if (err) {
                 console.log(err)
                 res.status(400)
-                    .message(
-                        'Hey dude, you messed up, try again... or whatever.js'
-                    )
+                    .json({
+                        msg: 'Hey dude, you messed up, try again... or whatever.js',
+                    })
                     .end()
             }
         }
     )
     connection.query(
-        ' INSERT INTO `Weights` (added_date,amount,userID,methodID) VALUES (?);',
+        'insert into `Weights` (added_date,amount,userID,methodID) VALUES (?);',
         [weightValues],
         (err) => {
             if (err) {
                 console.log(err)
                 res.status(400)
-                    .message(
-                        'Hey dude, you messed up, try again... or whatever.js'
-                    )
+                    .json({
+                        msg: 'Hey dude, you messed up, try again... or whatever.js',
+                    })
                     .end()
             }
         }
     )
     connection.query(
-        ' INSERT INTO `Steps` (added_date,amount,userID,methodID) VALUES (?);',
+        'insert into `Steps` (added_date,amount,userID,methodID) VALUES (?);',
         [stepsValues],
         (err) => {
             if (err) {
                 console.log(err)
                 res.status(400)
-                    .message(
-                        'Hey dude, you messed up, try again... or whatever.js'
-                    )
+                    .json({
+                        msg: 'Hey dude, you messed up, try again... or whatever.js',
+                    })
                     .end()
             }
         }
     )
-    res.status(200).message('Successfully activity successfully logged').end()
+    res.status(200)
+        .json({ msg: 'Successfully activity successfully logged' })
+        .end()
 })
 
-app.get('/getlogs', (req, res) => {
+app.post('/register', (req, res) => {
     const body = req.body
     connection.query(
-        'insert into `Users` (username, userpassword, email, age, height) values (?)',
-        Object.values(body),
+        'insert into `Users` (username, userpassword, email, age, height) values (?);',
+        [Object.values(body)],
         (err, result) => {
             if (err || result.length === 0) {
                 console.log(err)
+                res.status(400).json({ msg: err }).end()
             }
-            console.log(result)
-            res.status(200).json(result).end()
+
+            res.status(200).json({ msg: 'Success' }).end()
         }
     )
 })
@@ -138,7 +162,6 @@ app.get('/getlogs', (_, res) => {
             if (err || result.length === 0) {
                 console.log(err)
             }
-            console.log(result)
             res.status(200).json(result).end()
         }
     )

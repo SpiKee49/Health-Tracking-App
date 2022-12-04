@@ -1,5 +1,5 @@
 import { Activity, User } from '../../../types'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 
 import { UserContext } from '../../App'
 import { XMarkIcon } from '@heroicons/react/24/solid'
@@ -164,14 +164,14 @@ function LogsModal(props: Props) {
                                 }),
                             }
                         )
-                        const data = await response.text()
+                        const data = await response.json()
                         if (response.status === 200) {
-                            setSuccessMsg(data)
+                            setSuccessMsg(data.msg)
                             setTimeout(() => {
                                 setSuccessMsg('')
                             }, 3000)
                         } else {
-                            setErrorMsg(data)
+                            setErrorMsg(data.msg)
                             setTimeout(() => {
                                 setErrorMsg('')
                             }, 3000)

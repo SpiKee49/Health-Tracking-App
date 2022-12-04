@@ -34,9 +34,15 @@ function Logs() {
                 setLogs(logs)
             })
     }
+
     useEffect(() => {
         GetData()
     }, [])
+
+    if (needForFetch) {
+        GetData()
+        setFetch(false)
+    }
 
     return (
         <div className="page-wrapper">

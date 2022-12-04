@@ -4,6 +4,7 @@ import { UserContext } from '../../App'
 
 function LoginRegisterForm() {
     const { user, setUser } = useContext(UserContext)
+    const [msg, setMsg] = useState('')
     const [isLogin, setForm] = useState(true)
     const [email, setEmail] = useState('')
     const [password, setPass] = useState('')
@@ -11,7 +12,7 @@ function LoginRegisterForm() {
     const [height, setHeight] = useState(0)
     const [age, setAge] = useState(0)
 
-    async function Login() {
+    async function LoginRegister() {
         if (isLogin) {
             const response = await fetch('http://localhost:8080/login', {
                 method: 'POST',
@@ -26,10 +27,7 @@ function LoginRegisterForm() {
 
             const user = await response.json()
             setUser(user[0])
-        }
-    }
-    async function Register() {
-        if (isLogin) {
+        } else {
             const response = await fetch('http://localhost:8080/register', {
                 method: 'POST',
                 headers: {
@@ -43,10 +41,23 @@ function LoginRegisterForm() {
                     height,
                 }),
             })
+            if (response.status === 200) {
+                setMsg('Successfully registered, continuing to login...')
+                setTimeout(() => {
+                    setMsg(''), setForm(true)
+                }, 3000)
+            } else {
+                setMsg('Something went wrong, try again later')
+                setTimeout(() => {
+                    setMsg('')
+                }, 3000)
+            }
         }
     }
+
     return (
         <>
+            {msg && <p className="w-full text-center">{msg}</p>}
             <h1 className="text-center text-[50px] text-secondary mb-10">
                 {isLogin ? 'Login' : 'Register'}
             </h1>
@@ -84,7 +95,7 @@ function LoginRegisterForm() {
                             id="age"
                             placeholder="age in days"
                             type="number"
-                            value={age === 0 ? '' : height}
+                            value={age === 0 ? '' : age}
                             onChange={(e) => setAge(+e.target.value)}
                             className="w-full h-16 border-2 px-10 border-secondary outline-none mt-[-0.25rem]"
                             required
@@ -101,7 +112,7 @@ function LoginRegisterForm() {
                     required
                 />
                 <button
-                    onClick={Login}
+                    onClick={() => LoginRegister()}
                     className="w-full bg-secondary rounded-[25px] hover:rounded-md hover:bg-hover mt-5 h-16 text-primary uppercase transition-all duration-300 ease-linear"
                 >
                     Submit
