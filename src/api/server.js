@@ -154,6 +154,24 @@ app.post('/register', (req, res) => {
     )
 })
 
+app.post('/add-method', (req, res) => {
+    const body = req.body
+    connection.query(
+        'insert into `Methods` (methodName,methodDesc) values (?);',
+        [Object.values(body)],
+        (err, result) => {
+            if (err || result.length === 0) {
+                console.log(err)
+                res.status(400).json({ msg: 'Sum tin wong' }).end()
+            }
+
+            res.status(200)
+                .json({ msg: 'Successfully added a new activity' })
+                .end()
+        }
+    )
+})
+
 /* Get all Steps endpoint */
 app.get('/getlogs', (_, res) => {
     connection.query(
