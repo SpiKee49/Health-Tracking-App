@@ -1,3 +1,4 @@
+import { AdContext, UserContext } from '../../App'
 import React, { useContext, useEffect, useState } from 'react'
 import {
     TrashIcon,
@@ -7,13 +8,14 @@ import {
 
 import AddUserForm from './AddUserForm'
 import { User } from '../../../types'
-import { UserContext } from '../../App'
 
 function Account() {
     const { user, setUser } = useContext(UserContext)
+    const { ad, setAd, nff } = useContext(AdContext)
 
     const [users, setUsers] = useState<Array<User>>([])
-
+    const [imageSrc, setImageSrc] = useState(ad?.imageSrc)
+    const [linkTo, setLinkTo] = useState(ad?.linkTo)
     const [errorMsg, setErrorMsg] = useState('')
     const [successMsg, setSuccessMsg] = useState('')
     const [showAddUser, setShowAddUser] = useState(false)
@@ -166,6 +168,52 @@ function Account() {
                             ))}
                         </tbody>
                     </table>
+                    <div className="w-full h-auto flex flex-col mt-10">
+                        <span className="text-xl">Ad detail</span>
+                        <span>Ad picture</span>
+                        <input
+                            type="text"
+                            value={imageSrc}
+                            onChange={(e) => {
+                                setImageSrc(e.target.value)
+                            }}
+                            className="w-[40%] min-w-[200px] h-10 border-2 px-10 border-secondary rounded-lg outline-none"
+                        />
+                        <span>Ad link</span>
+                        <input
+                            type="text"
+                            value={linkTo}
+                            onChange={(e) => {
+                                setLinkTo(e.target.value)
+                            }}
+                            className="w-[40%] min-w-[200px] h-10 border-2 px-10 border-secondary rounded-lg outline-none"
+                        />
+                        <span>Add was clicked: {ad?.clickCounter} times</span>
+                        <button
+                            onClick={async () => {
+                                const response = await fetch(
+                                    'http://localhost:8080/advertisement',
+                                    {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                        },
+                                        body: JSON.stringify({
+                                            imageSrc,
+                                            linkTo,
+                                            clickCounter: ad?.clickCounter,
+                                        }),
+                                    }
+                                )
+                                if (response.status === 200) {
+                                    nff(true)
+                                }
+                            }}
+                            className="w-15 h-10 bg-secondary mt-5 text-primary rounded-2xl uppercase hover:bg-hover hover:rounded-md"
+                        >
+                            Save
+                        </button>
+                    </div>
                     {showAddUser && (
                         <AddUserForm
                             nff={setNeedForFetch}

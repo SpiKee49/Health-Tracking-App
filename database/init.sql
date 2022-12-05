@@ -43,6 +43,12 @@ CREATE TABLE IF NOT EXISTS Steps (
     FOREIGN KEY (methodID) REFERENCES Methods(methodID) ON DELETE
     SET DEFAULT
 );
+CREATE TABLE IF NOT EXISTS Advertisement (
+    id INT NOT NULL,
+    imageSrc VARCHAR(2083),
+    linkTo VARCHAR(2083),
+    clickCounter INT DEFAULT NULL
+);
 INSERT INTO Users (username, userpassword, email, age, height)
 VALUES ('miro', 'pele', 'miro@pele.sk', '20', '183'),
     ('anton', 'ferko', 'anton@ferko.sk', '35', '201'),
@@ -57,3 +63,10 @@ VALUES (
         'Cycling on road bike for at least 40km'
     ),
     ('Weight lifting', 'Working out for one hour');
+INSERT INTO Advertisement (id, imageSrc, linkTo, clickCounter)
+VALUES (
+        1,
+        'https://media.makeameme.org/created/youve-got-mail-5944f8.jpg',
+        'https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley',
+        0
+    );

@@ -2,6 +2,7 @@ import { Activity, LogType } from '../../../types'
 import React, { useContext, useEffect, useState } from 'react'
 
 import LogsModal from './LogsModal'
+import MethodsModal from './MethodsModal'
 import { PencilSquareIcon } from '@heroicons/react/20/solid'
 import { PlusCircleIcon } from '@heroicons/react/24/solid'
 import Stats from './Stats'
@@ -94,6 +95,13 @@ function Logs() {
                     nff={setFetch}
                     availableActivities={availableActivities}
                     visible={setModal}
+                />
+            )}
+            {methodsModal && (
+                <MethodsModal
+                    nff={setFetch}
+                    activities={availableActivities}
+                    visible={setMethodsModal}
                 />
             )}
         </div>

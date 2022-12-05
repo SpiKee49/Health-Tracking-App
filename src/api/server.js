@@ -25,8 +25,8 @@ app.use(express.json({ extended: false }))
 */
 
 /* Home endpoint */
-app.get('/', async (_, res) => {
-    connection.query(`SELECT * FROM Users`, (err, result) => {
+app.get('/', (_, res) => {
+    connection.query('SELECT * FROM `Users`', (err, result) => {
         if ((err, result)) {
             console.log(err)
         }
@@ -44,6 +44,31 @@ app.get('/users', (_, res) => {
     })
 })
 
+app.get('/advertisement', (_, res) => {
+    connection.query('select * from `Advertisement` limit 1', (err, result) => {
+        if (err) {
+            console.log(err)
+            res.status(400).json({ msg: 'Unexpected error' }).end()
+        }
+        res.status(200).json(result).end()
+    })
+})
+
+app.post('/advertisement', (req, res) => {
+    const body = req.body
+    connection.query(
+        'update `Advertisement` set imageSrc=?, linkTo=?, clickCounter=? where id = 1',
+        [body.imageSrc, body.linkTo, body.clickCounter],
+        (err, result) => {
+            if (err) {
+                console.log(err)
+                res.status(400).json({ msg: 'Unexpected error' }).end()
+            }
+            res.status(200).json(result).end()
+        }
+    )
+})
+
 app.post('/remove-user', (req, res) => {
     const body = req.body
     connection.query(
@@ -55,6 +80,21 @@ app.post('/remove-user', (req, res) => {
                 res.status(400).json({ msg: 'Unexpected error' }).end()
             }
             res.status(200).json({ msg: 'User removed successfully' }).end()
+        }
+    )
+})
+
+app.post('/remove-method', (req, res) => {
+    const body = req.body
+    connection.query(
+        'delete from `Methods` where methodID = ?',
+        [body.methodID],
+        (err) => {
+            if (err) {
+                console.log(err)
+                res.status(400).json({ msg: 'Unexpected error' }).end()
+            }
+            res.status(200).json({ msg: 'Method removed successfully' }).end()
         }
     )
 })
@@ -197,6 +237,16 @@ app.post('/login', (req, res) => {
             res.status(200).json(result).end()
         }
     )
+})
+
+app.get('/methods', (_, res) => {
+    connection.query('select * from `Methods`', (err, result) => {
+        if (err) {
+            res.status(400).json({ msg: 'Unexpected error' }).end()
+        }
+
+        res.status(200).json(result).end()
+    })
 })
 
 app.listen(port, () => console.log(`Server listening on port ${port}!`))

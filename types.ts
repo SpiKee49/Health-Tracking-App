@@ -18,6 +18,12 @@ export type UserContextType = {
     setUser: (value: User | null) => void
 }
 
+export type AdContextType = {
+    ad?: AdvertisementType | null
+    setAd: (value: AdvertisementType) => void
+    nff: (value: boolean) => void
+}
+
 export type LogType = {
     id: number
     added_date: string
@@ -26,4 +32,11 @@ export type LogType = {
     heartBeat: number
     userID: number
     methodID: number
+}
+
+export type AdvertisementType = {
+    id: number
+    imageSrc: string
+    linkTo: string
+    clickCounter: number
 }
