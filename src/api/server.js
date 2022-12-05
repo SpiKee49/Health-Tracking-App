@@ -1,7 +1,10 @@
 import express, { json } from 'express'
 
 import cors from 'cors'
+import { dirname } from 'path'
+import { fileURLToPath } from 'url'
 import mysql2 from 'mysql2'
+import path from 'path'
 
 const app = express()
 const port = 3000
@@ -16,23 +19,17 @@ const connection = mysql2.createConnection({
     connectionLimit: 10,
 })
 
+// https://stackoverflow.com/a/50052194
+const __dirname = dirname(fileURLToPath(import.meta.url))
+
 /* API setup */
 app.use(cors())
 app.use(express.json({ extended: false }))
+app.use(express.static(path.join(__dirname, '../../dist')))
 
 /* 
     Endpoints
 */
-
-/* Home endpoint */
-app.get('/', (_, res) => {
-    connection.query('SELECT * FROM `Users`', (err, result) => {
-        if ((err, result)) {
-            console.log(err)
-        }
-        res.status(200).json(result).end()
-    })
-})
 
 app.get('/users', (_, res) => {
     connection.query('select * from `Users`', (err, result) => {

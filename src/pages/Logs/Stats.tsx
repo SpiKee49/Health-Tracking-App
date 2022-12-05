@@ -7,6 +7,10 @@ import {
     LineElement,
     LinearScale,
     PointElement,
+    ScatterController,
+    ScatterControllerChartOptions,
+    ScatterControllerDatasetOptions,
+    ScatterDataPoint,
     Tooltip,
 } from 'chart.js'
 import { ChartBarSquareIcon, QueueListIcon } from '@heroicons/react/20/solid'
@@ -27,7 +31,8 @@ ChartJS.register(
     LineElement,
     Legend,
     Tooltip,
-    LineController
+    LineController,
+    ScatterController
 )
 
 type Props = {

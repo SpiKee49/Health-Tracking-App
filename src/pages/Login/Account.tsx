@@ -22,7 +22,7 @@ function Account() {
     const [needForFetch, setNeedForFetch] = useState(false)
 
     function GetUsers() {
-        fetch('http://localhost:8080/')
+        fetch('http://localhost:8080/users')
             .then((res) => res.json())
             .then((data) => setUsers(data))
     }
