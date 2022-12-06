@@ -5,17 +5,17 @@ services:
     mariadb:
         image: mariadb:10.9 #toto ked nevies brasko tak sa nerozpravaj so mnou
         container_name: mariadb #takto sa vola tvoj kontajneris, resp to kde sa budes prihlasovat do databazy
-        restart: unless-stopped #toto mas u pici
+        restart: unless-stopped #toto ta nemusi zaujimat
         volumes:
             - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
         environment:
             MARIADB_ROOT_PASSWORD: pele #toto je heslo pre root pouzivatela ked sa naistaluje DB v dockeri
     #toto je len GUI-nea pig
-    adminer:
-        image: adminer
-        restart: always
-        ports:
-            - 1234:8080 #toto znaci ze ked napises localhost:8080 do tvojho prehliadaca fascinujuceho tak tak bude adminer si predstav
+    # adminer:
+    #     image: adminer
+    #     restart: always
+    #     ports:
+    #         - 1234:8080 #toto znaci ze ked napises localhost:8080 do tvojho prehliadaca fascinujuceho tak tak bude adminer si predstav
 
     backend:
         build: .
