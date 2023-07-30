@@ -3,7 +3,7 @@
 After cloning repository enter `docker-compose build` then `docker-compose up`
 Project will be running on `localhost:8080` after successfull build
 
-## Used techonologies
+## Used technologies
 - Vite
 - React
 - Typescript
